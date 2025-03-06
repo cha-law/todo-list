@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif; /* Need a new font */
+    line-height: 1.5;
+}
+
+body {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    background-color: #f7f7f7;
+}
+
+img {
+    width: 24px;
+}
+
+.sidebar {
+    box-shadow: 5px 0px 5px #dde5e7;
+    background-color: #edf1f1;
+}
+
+.sb-profile {
+    padding: 16px;
+    box-shadow: 0px 2px 3px #dde5e7;
+    margin-bottom: 24px;
+}
+
+.sb-profile,
+.sb-user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+} 
+
+.sb-user {
+    gap: 8px;
+    display: flex;
+}
+
+.sb-user > p {
+    font-weight: 900;
+}
+
+.avatar {
+    width: 36px;
+}
+
+.sb-profile-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sb-pages {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0px 24px;
+}
+
+.seperator {
+    background-color: #c7c7c7;
+    height: 1px;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.page-section {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+}
+
+.add-task {
+    color: #1F3438;
+    font-weight: 900;
+}
+
+.page-button {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    gap: 8px;
+    width: 100%;
+    font-size: 1rem;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.selected {
+    background-color: #99e0f162;
+}
