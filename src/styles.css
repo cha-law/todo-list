@@ -74,7 +74,7 @@ img {
     flex-direction: column;
 }
 
-.add-task {
+.add-project {
     color: #1F3438;
     font-weight: 900;
 }
@@ -106,10 +106,15 @@ img {
     padding: 80px clamp(24px, 15%, 100px);
 }
 
+.project-options {
+    display: flex;
+    gap: 8px;
+}
+
 .project-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 8px;
 }
 
 .content-page {
@@ -121,7 +126,7 @@ img {
 .task {
     display: flex;
     justify-content: space-between;
-    padding: 12px 0px;
+    padding: 12px 0px 0px 0px;
     border-top: solid 1px #c7c7c7;
 }
 
@@ -149,11 +154,31 @@ img {
     gap: 8px;
 }
 
-.task button {
+.task button,
+.project-options button {
     border: none;
     background: none;
 }
 
-.task button:hover {
+.project-options button {
+    height: 24px;
+}
+
+.task button:hover,
+.project-options button:hover {
     cursor: pointer;
+}
+
+.add-task {
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    color: #a1a1a1;
+    transition: 0.5s;
+}
+
+.add-task:hover {
+    cursor: pointer;
+    padding-left: 4px;
+    transition: 0.5s;
 }
