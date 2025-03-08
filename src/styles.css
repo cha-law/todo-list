@@ -89,8 +89,71 @@ img {
     font-size: 1rem;
     padding: 4px;
     border-radius: 4px;
+    transition: 0.2s;
+}
+
+.page-button:hover {
+    cursor: pointer;
+    background-color: #99dff13b;
+    transition: 0.2s;
 }
 
 .selected {
     background-color: #99e0f162;
+}
+
+.content {
+    padding: 80px clamp(24px, 15%, 100px);
+}
+
+.project-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.content-page {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0px;
+    border-top: solid 1px #c7c7c7;
+}
+
+.task > p {
+    font-size: 1rem;
+}
+
+.task-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.left {
+    display: flex;
+    gap: 16px;
+}
+
+.time {
+    font-size: 0.8rem;
+    color: #1F3438;
+}
+
+.task-options {
+    display: flex;
+    gap: 8px;
+}
+
+.task button {
+    border: none;
+    background: none;
+}
+
+.task button:hover {
+    cursor: pointer;
 }
