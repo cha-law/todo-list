@@ -4,6 +4,8 @@ import "./styles.css";
 
 import circleoutline from "./assets/svgs/circle-outline.svg";
 import trashcan from "./assets/svgs/trash-can.svg";
+import rename from "./assets/svgs/rename.svg";
+import plus from "./assets/svgs/plus2.svg";
 
 function TodoController() {
     const Screen = ScreenController();
@@ -25,52 +27,144 @@ function TodoController() {
                 // logic to change task on screen
             };
         };
-
-        get Title() {
-            return this.title;
-        };
-
-        get Time() {
-            return this.time;
-        };
-
-        get Priority() {
-            return this.priority;
-        };
     };
 
-    function createProject() {
+    function createProject(title) {
+        let i = 0;
+        // Ensuring we don't override existing elements.
+        while (localStorage.getItem(i) != null) {
+            i++;
+        };
+        localStorage.setItem(i, "[]");
 
+        // Store the title of the project.
+        let namesArray = JSON.parse(localStorage.getItem("names")); 
+        if (namesArray === null) {
+            localStorage.setItem("names", "[]");
+            namesArray = JSON.parse(localStorage.getItem("names")); 
+        };
+
+        namesArray.splice(i, 0, title);
+        localStorage.setItem("names", JSON.stringify(namesArray));
+
+        // Add project to projects list in the sidebar
+
+        //////
     };
 
-    function createTask(title, time, priority) {
-        if (localStorage.getItem(title)) {
+    function createTask(title, time, priority, pageID) {
+        if (localStorage.getItem(title)) { // NEEDS TO BE UPDATED: TASKS ARE NOW IN ARRAYS
             return "DUPLICATE";
         };
 
         let newTask = new Task(title, time, priority);
-        localStorage.setItem(String(title), JSON.stringify(newTask));
-        Screen.addTaskToScreen(newTask);
-        return newTask;
+
+        // Add the item to the array in the page array in local storage.
+        let pageArray = [];
+        pageArray = JSON.parse(localStorage.getItem(pageID)) || [];
+        pageArray.push(newTask);
+        localStorage.setItem(pageID, JSON.stringify(pageArray));
+
+        Screen.refreshPage();
     };
 
-    return { createProject, createTask };
+    function addToday() {
+        if (localStorage.getItem(0) === null) {
+            createProject("Today");
+            createTask("Eat Breakfast", "7:30 AM", "high", 0);
+        };
+        Screen.refreshPage();
+    };
+
+    return { createProject, createTask, addToday };
 };
 
 function ScreenController() {
-    let activePage = "today";
+    let activePage = 0;
 
     function addButtonEventListeners() {
-
+        const addTask = document.querySelector(".add-task");
+        addTask.addEventListener("click", openAddTaskDialog);
     };
 
-    function openPage() {
+    function openAddTaskDialog() {
+        
+    };
 
+    function refreshPage() {
+        removeContents();
+        openPage(activePage);
+    };
+
+    function openPage(pageID) {
+        const content = document.createElement("div");
+        content.classList.toggle("project-wrapper");
+
+        let optionsDiv = document.createElement("div");
+        optionsDiv.classList.toggle("project-options");
+
+        // Add two buttons
+        let renameButton = document.createElement("button");
+        let renameImg = document.createElement("img");
+        renameImg.src = rename;
+        renameButton.appendChild(renameImg);
+
+        let deleteButton = document.createElement("button");
+        let deleteImg = document.createElement("img");
+        deleteImg.src = trashcan;
+        deleteButton.appendChild(deleteImg);
+
+        optionsDiv.appendChild(renameButton);
+        optionsDiv.appendChild(deleteButton);
+        content.appendChild(optionsDiv);
+
+        // Add heading
+        let h1 = document.createElement("h1");
+        h1.textContent = JSON.parse(localStorage.getItem("names"))[pageID];
+        content.appendChild(h1);
+
+        // Add tasks div
+        let tasksDiv = document.createElement("div");
+        tasksDiv.classList.toggle("content-page");
+        content.appendChild(tasksDiv);
+
+        let h3 = document.createElement("h3");
+        h3.textContent = "My Tasks";
+        tasksDiv.appendChild(h3);
+
+        document.querySelector(".content").appendChild(content);
+
+        // Add every task in local storage
+        const currentPage = JSON.parse(localStorage.getItem(pageID));
+
+        currentPage.forEach(task => {
+            addTaskToScreen(task);
+        });
+
+        // Add the Add Task button
+        let addTaskButton = document.createElement("div");
+        addTaskButton.classList.toggle("task");
+        addTaskButton.classList.toggle("add-task");
+
+        let plusImg = document.createElement("img");
+        plusImg.src = plus;
+
+        let addTaskText = document.createElement("p");
+        addTaskText.textContent = "Add Task";
+
+        addTaskButton.appendChild(plusImg);
+        addTaskButton.appendChild(addTaskText);
+
+        tasksDiv.appendChild(addTaskButton);
+
+        activePage = pageID;
     };
 
     function removeContents() {
-        let content = document.querySelector(".project-wrapper");
-        content.remove();
+        const content = document.querySelector(".project-wrapper");
+        if (content) {
+            content.remove();
+        };
     };
 
     function addTaskToScreen(taskObject) {
@@ -92,10 +186,10 @@ function ScreenController() {
         let infoDiv = document.createElement("div");
         infoDiv.classList.toggle("task-info");
         let titleText = document.createElement("p");
-        titleText.textContent = taskObject.Title; 
+        titleText.textContent = taskObject.title; 
         let timeText = document.createElement("p");
         timeText.classList.toggle("time");
-        timeText.textContent = taskObject.Time;
+        timeText.textContent = taskObject.time;
         infoDiv.appendChild(titleText);
         infoDiv.appendChild(timeText);
 
@@ -118,12 +212,15 @@ function ScreenController() {
         taskDiv.appendChild(taskOptionsDiv);
 
         // Finally, add the task div to the webpage
-        const projects = document.querySelector(".my-projects");
-        projects.appendChild(taskDiv);
+        const content = document.querySelector(".content-page");
+        content.appendChild(taskDiv);
 
-    }
+    };
 
-    return { removeContents, addTaskToScreen };
+    return { addButtonEventListeners, refreshPage, removeContents, addTaskToScreen };
 };
 
-const newtask = TodoController().createTask("bun you fam", "1135", "high")
+// Add the today screen 
+const todo = TodoController();
+
+todo.addToday();
