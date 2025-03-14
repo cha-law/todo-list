@@ -94,12 +94,12 @@ img {
 
 .page-button:hover {
     cursor: pointer;
-    background-color: #99dff13b;
+    background-color: #aed4dd62;
     transition: 0.2s;
 }
 
 .selected {
-    background-color: #99e0f162;
+    background-color: #aed4dda9;
 }
 
 .content {
