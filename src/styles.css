@@ -182,3 +182,7 @@ img {
     padding-left: 4px;
     transition: 0.5s;
 }
+
+.crossed p {
+    text-decoration: line-through;
+}

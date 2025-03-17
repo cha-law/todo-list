@@ -3,6 +3,7 @@ import "./styles.css";
 // SVGs
 
 import circleoutline from "./assets/svgs/circle-outline.svg";
+import checkcircle from "./assets/svgs/check-circle.svg";
 import trashcan from "./assets/svgs/trash-can.svg";
 import rename from "./assets/svgs/rename.svg";
 import plus from "./assets/svgs/plus2.svg";
@@ -16,16 +17,6 @@ function TodoController() {
             this.time = time;
             this.priority = priority;
             this.checked = false;
-        };
-
-        check(checked) {
-            if (checked === false) {
-                checked = true;
-                // logic to change task on screen
-            } else {
-                checked = false;
-                // logic to change task on screen
-            };
         };
     };
 
@@ -82,13 +73,8 @@ function TodoController() {
 function ScreenController() {
     let activePage = 0;
 
-    function addButtonEventListeners() {
-        const addTask = document.querySelector(".add-task");
-        addTask.addEventListener("click", openAddTaskDialog);
-    };
-
     function openAddTaskDialog() {
-        
+        console.log("hello")
     };
 
     function refreshPage() {
@@ -145,6 +131,7 @@ function ScreenController() {
         let addTaskButton = document.createElement("div");
         addTaskButton.classList.toggle("task");
         addTaskButton.classList.toggle("add-task");
+        addTaskButton.addEventListener("click", openAddTaskDialog);
 
         let plusImg = document.createElement("img");
         plusImg.src = plus;
@@ -178,6 +165,7 @@ function ScreenController() {
         let toggleButton = document.createElement("button");
         let toggleButtonImg = document.createElement("img");
         toggleButton.classList.toggle("toggle");
+        toggleButton.addEventListener("click", toggleTask);
         toggleButtonImg.src = circleoutline;
         toggleButton.appendChild(toggleButtonImg);
         leftDiv.appendChild(toggleButton);
@@ -186,6 +174,7 @@ function ScreenController() {
         let infoDiv = document.createElement("div");
         infoDiv.classList.toggle("task-info");
         let titleText = document.createElement("p");
+        titleText.classList.toggle("title");
         titleText.textContent = taskObject.title; 
         let timeText = document.createElement("p");
         timeText.classList.toggle("time");
@@ -214,10 +203,34 @@ function ScreenController() {
         // Finally, add the task div to the webpage
         const content = document.querySelector(".content-page");
         content.appendChild(taskDiv);
-
     };
 
-    return { addButtonEventListeners, refreshPage, removeContents, addTaskToScreen };
+    function toggleTask(event) {
+        const button = event.target;
+        const taskDiv = button.parentElement.parentElement.parentElement;
+        taskDiv.classList.toggle("crossed");
+
+        if (taskDiv.classList.contains("crossed")) {
+            button.src = checkcircle;
+        } else {
+            button.src = circleoutline;
+        };
+
+        // Change in local storage
+        const key = JSON.parse(localStorage[activePage]);
+        for (let task in key) {
+            if (key[task].title === taskDiv.querySelector(".left > .task-info > .title").textContent) {
+                if (key[task].checked === false) {
+                    key[task].checked = true;
+                } else {
+                    key[task].checked = false;
+                };
+                localStorage[activePage] = JSON.stringify(key);
+            };
+        };
+    };
+
+    return { refreshPage, removeContents, addTaskToScreen };
 };
 
 // Add the today screen 
