@@ -74,7 +74,15 @@ function ScreenController() {
     let activePage = 0;
 
     function openAddTaskDialog() {
-        console.log("hello")
+        const dialog = document.querySelector("dialog");
+        const dialogCloseButton = document.querySelector(".dialog-close");
+
+        dialog.showModal();
+
+        dialogCloseButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            dialog.close();
+        })
     };
 
     function refreshPage() {
